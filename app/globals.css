@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -23,4 +23,135 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  --paper: #eef0f6;
+  --card: #ffffff;
+  --ink: #1b2140;
+  --muted: #6a7090;
+  --line: #d9dcea;
+  --curtain: #8e1b3a;
+  --brass: #c9a24a;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-vazir), system-ui, sans-serif;
+  line-height: 1.8;
+}
+
+:focus-visible {
+  outline: 2px solid var(--curtain);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+:root {
+  --paper: #eef0f6;
+  --card: #ffffff;
+  --ink: #1b2140;
+  --muted: #6a7090;
+  --line: #d9dcea;
+  --curtain: #8e1b3a;
+  --brass: #c9a24a;
+  --on-brass: #1b2140;
+}
+
+[data-theme='dark'] {
+  --paper: #10142a;
+  --card: #1a2040;
+  --ink: #e8eaf6;
+  --muted: #9aa0c3;
+  --line: #2c3460;
+  --curtain: #e0577a;
+  --brass: #d8b45a;
+}
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-vazir), system-ui, sans-serif;
+  line-height: 1.8;
+}
+
+:focus-visible {
+  outline: 2px solid var(--curtain);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+:root {
+  --paper: #eceffb;
+  --card: #ffffff;
+  --ink: #16164a;
+  --muted: #8083a3;
+  --line: #e7e9f5;
+  --avail: #eceef8;
+  --reserved: #8b8fb8;
+  --accent: #f4155a;
+}
+
+[data-theme='dark'] {
+  --paper: #0b0d20;
+  --card: #151833;
+  --ink: #edeefa;
+  --muted: #9a9dc2;
+  --line: #262a52;
+  --avail: #222649;
+  --reserved: #6a6fa6;
+  --accent: #ff3d77;
+}
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-vazir), system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
