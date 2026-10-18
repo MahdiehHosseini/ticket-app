@@ -1,157 +1,125 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-:root {
-  --paper: #eef0f6;
-  --card: #ffffff;
-  --ink: #1b2140;
-  --muted: #6a7090;
-  --line: #d9dcea;
-  --curtain: #8e1b3a;
-  --brass: #c9a24a;
-}
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-vazir), system-ui, sans-serif;
-  line-height: 1.8;
-}
-
-:focus-visible {
-  outline: 2px solid var(--curtain);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-  }
-}
-
-:root {
-  --paper: #eef0f6;
-  --card: #ffffff;
-  --ink: #1b2140;
-  --muted: #6a7090;
-  --line: #d9dcea;
-  --curtain: #8e1b3a;
-  --brass: #c9a24a;
-  --on-brass: #1b2140;
-}
-
-[data-theme='dark'] {
-  --paper: #10142a;
-  --card: #1a2040;
-  --ink: #e8eaf6;
-  --muted: #9aa0c3;
-  --line: #2c3460;
-  --curtain: #e0577a;
-  --brass: #d8b45a;
-}
-
-html {
-  color-scheme: light;
-}
-
-html[data-theme='dark'] {
-  color-scheme: dark;
-}
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-vazir), system-ui, sans-serif;
-  line-height: 1.8;
-}
-
-:focus-visible {
-  outline: 2px solid var(--curtain);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-  }
-}
-
-:root {
   --paper: #eceffb;
-  --card: #ffffff;
+  --card: rgba(255, 255, 255, 0.72);
   --ink: #16164a;
-  --muted: #8083a3;
-  --line: #e7e9f5;
-  --avail: #eceef8;
+  --muted: #7b7ea3;
+  --line: rgba(22, 22, 74, 0.1);
+  --avail: rgba(22, 22, 74, 0.07);
   --reserved: #8b8fb8;
   --accent: #f4155a;
+  --aura-1: rgba(124, 92, 255, 0.35);
+  --aura-2: rgba(255, 90, 140, 0.3);
+  --aura-3: rgba(255, 170, 110, 0.3);
 }
-
 [data-theme='dark'] {
-  --paper: #0b0d20;
-  --card: #151833;
-  --ink: #edeefa;
-  --muted: #9a9dc2;
-  --line: #262a52;
-  --avail: #222649;
-  --reserved: #6a6fa6;
+  --paper: #0b0919;
+  --card: rgba(255, 255, 255, 0.07);
+  --ink: #f3f2ff;
+  --muted: #a9a5cf;
+  --line: rgba(255, 255, 255, 0.14);
+  --avail: rgba(255, 255, 255, 0.1);
+  --reserved: #4b4875;
   --accent: #ff3d77;
+  --aura-1: rgba(110, 76, 255, 0.55);
+  --aura-2: rgba(255, 61, 119, 0.4);
+  --aura-3: rgba(255, 138, 76, 0.35);
+}
+html { color-scheme: light; }
+html[data-theme='dark'] { color-scheme: dark; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-vazir), system-ui, sans-serif; line-height: 1.7; position: relative; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* پس‌زمینه‌ی زنده (aurora): سه لکه‌ی نوری محو که آرام جابه‌جا می‌شوند */
+body::before {
+  content: ''; position: fixed; inset: -20vmax; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40vmax 40vmax at 15% 10%, var(--aura-1), transparent 60%),
+    radial-gradient(35vmax 35vmax at 85% 20%, var(--aura-2), transparent 60%),
+    radial-gradient(45vmax 45vmax at 60% 95%, var(--aura-3), transparent 60%);
+  filter: blur(30px);
+  animation: drift 26s ease-in-out infinite alternate;
 }
 
-html {
-  color-scheme: light;
+/* شیشه‌ای کردن همه‌ی کارت‌ها و نوارهایی که از --card استفاده می‌کنند */
+[class*="bg-[var(--card)]"] {
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 24px 60px -32px rgba(10, 6, 40, 0.55);
 }
-
-html[data-theme='dark'] {
-  color-scheme: dark;
+.glass-pill {
+  background: rgba(18, 14, 40, 0.45); color: #fff; border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-radius: 999px; padding: 2px 11px; font-size: 12px; font-weight: 700;
 }
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-vazir), system-ui, sans-serif;
-  line-height: 1.7;
+.glass-field {
+  background: var(--avail); border: 1px solid var(--line); border-radius: 999px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: box-shadow 0.25s, border-color 0.25s;
 }
+.glass-field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); }
 
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/* دکمه‌ی اصلی: گرادیان، درخشش عبوری و فلش متحرک */
+.cta-grad {
+  position: relative; overflow: hidden; color: #fff;
+  background: linear-gradient(100deg, var(--accent), #ff8a4c);
+  box-shadow: 0 16px 34px -14px var(--accent);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-
-.no-scrollbar {
-  scrollbar-width: none;
+.cta-grad:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -14px var(--accent); }
+.cta-grad:active { transform: scale(0.97); }
+.cta-grad::after {
+  content: ''; position: absolute; inset: 0; transform: translateX(-120%);
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
 }
+[dir='rtl'] .cta-grad svg { --nx: -5px; }
+[dir='ltr'] .cta-grad svg { --nx: 5px; }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* کارت فیلم: کج‌شدن سه‌بعدی و برق نور زیر نشانگر */
+.tilt { transition: transform 0.25s ease-out; will-change: transform; }
+.shine {
+  pointer-events: none; opacity: 0; transition: opacity 0.25s;
+  background: radial-gradient(circle at var(--sx, 50%) var(--sy, 0%), rgba(255, 255, 255, 0.35), transparent 45%);
 }
+.tilt:hover .shine { opacity: 1; }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
+/* صندلی‌ها */
+.seat-picked {
+  background: var(--accent); transform: scale(1.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent), 0 6px 18px -2px var(--accent);
+}
+.screen-glow { filter: drop-shadow(0 0 8px var(--accent)); }
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes drift { to { transform: translate3d(3vmax, -2vmax, 0) rotate(8deg) scale(1.08); } }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+  @keyframes page-in { from { opacity: 0; transform: translateY(10px); } }
+  @keyframes row-in { from { opacity: 0; transform: translateY(10px) scale(0.92); } }
+  @keyframes pop { 0% { transform: scale(0.7); } 60% { transform: scale(1.22); } 100% { transform: scale(1.12); } }
+  @keyframes sheen { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+  @keyframes nudge { 50% { translate: var(--nx, 5px) 0; } }
+  @keyframes float { 50% { transform: translate3d(14px, 10px, 0) scale(1.1); } }
+  @keyframes glow { 50% { filter: drop-shadow(0 0 16px var(--accent)); } }
+
+  .rise { animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 70ms); }
+  .page-in { animation: page-in 0.45s ease-out backwards; }
+  .row-in { animation: row-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--r, 0) * 60ms); }
+  .seat-picked { animation: pop 0.35s cubic-bezier(0.3, 1.5, 0.5, 1); }
+  .cta-grad::after { animation: sheen 3.4s ease-in-out infinite; }
+  .cta-grad svg { animation: nudge 1.4s ease-in-out infinite; }
+  .blob { animation: float 9s ease-in-out infinite alternate; }
+  .blob-b { animation-duration: 12s; animation-direction: alternate-reverse; }
+  .screen-glow { animation: glow 3s ease-in-out infinite; }
+
+  /* کاروسل موبایل: کارت وسط بزرگ‌تر و روشن‌تر می‌شود (فقط مرورگرهای پشتیبان) */
+  @supports (animation-timeline: view()) {
+    @media (max-width: 767px) {
+      .snap-card { animation: focus linear both; animation-timeline: view(inline); }
+      @keyframes focus { 0% { transform: scale(0.86); opacity: 0.55; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.86); opacity: 0.55; } }
+    }
   }
 }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
