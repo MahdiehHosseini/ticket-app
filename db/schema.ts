@@ -48,3 +48,21 @@ export const reservations = pgTable(
   // جلوی رزرو دوبل یک صندلی در یک سانس را در سطح دیتابیس می‌گیرد
   (t) => [uniqueIndex('reservations_show_seat_uq').on(t.showId, t.seat)],
 )
+
+// هر ردیف = یک تلاش پرداخت در درگاه
+export const payments = pgTable('payments', {
+  id: serial('id').primaryKey(),
+  authority: text('authority').notNull().unique(),
+  showId: text('show_id')
+    .notNull()
+    .references(() => shows.id, { onDelete: 'cascade' }),
+  userId: text('user_id').notNull(),
+  holdToken: text('hold_token').notNull(),
+  seats: text('seats').notNull(),
+  amount: integer('amount').notNull(), // تومان
+  status: text('status', { enum: ['pending', 'verifying', 'paid', 'failed'] })
+    .notNull()
+    .default('pending'),
+  refId: text('ref_id'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+})

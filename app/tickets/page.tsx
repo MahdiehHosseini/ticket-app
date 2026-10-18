@@ -10,6 +10,8 @@ import { getEvents, getShows } from '@/lib/queries'
 const cells = Array.from({ length: 49 }, (_, i) => (i * 7 + (i % 5) * 3) % 3 !== 0)
 const SEATS = ['D5', 'D6']
 
+export const metadata = { robots: { index: false, follow: false } }
+
 async function Content() {
   const { locale } = await getPrefs()
   const t = dict[locale]

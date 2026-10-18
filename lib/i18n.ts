@@ -1,4 +1,4 @@
-import { signIn } from "@/auth";
+import { signIn } from '@/auth'
 
 export type Locale = 'fa' | 'en'
 export type L = { fa: string; en: string }
@@ -60,8 +60,23 @@ export const dict = {
     holdExpired: 'زمان نگه‌داشتن صندلی‌ها تموم شد.',
     backToSeats: 'بازگشت به انتخاب صندلی',
     holdLeft: 'زمان باقی‌مانده برای پرداخت',
-    signIn: 'ورود', signOut: 'خروج', loginGithub: 'ورود با گیت‌هاب', loginToPay: 'برای ادامه‌ی پرداخت وارد حسابت شو.',
-    loginToSee: 'برای دیدن بلیت‌هات وارد شو.', noTickets: 'هنوز بلیتی نخریدی.',
+    signIn: 'ورود',
+    signOut: 'خروج',
+    loginGithub: 'ورود با گیت‌هاب',
+    loginToPay: 'برای ادامه‌ی پرداخت وارد حسابت شو.',
+    loginToSee: 'برای دیدن بلیت‌هات وارد شو.',
+    noTickets: 'هنوز بلیتی نخریدی.',
+    payCancelled:
+      'پرداخت لغو شد یا ناموفق بود. صندلی‌ها هنوز برای تو نگه داشته شدن؛ دوباره تلاش کن.',
+    gatewayDown: 'اتصال به درگاه برقرار نشد. کمی بعد دوباره تلاش کن.',
+    payLost:
+      'زمان نگه‌داشتن صندلی‌ها تموم شده بود و بلیتی صادر نشد. مبلغ پرداختی طبق قوانین درگاه به حسابت برمی‌گرده.',
+    payVerify:
+      'تایید پرداخت با مشکل مواجه شد. اگه مبلغ از حسابت کم شده، چند دقیقه بعد دوباره بررسی کن.',
+    search: 'جستجوی فیلم…',
+    allGenres: 'همه',
+    noResults: 'فیلمی پیدا نشد.',
+    fromPrice: 'از',
   },
   en: {
     brand: 'Front Row',
@@ -114,7 +129,22 @@ export const dict = {
     holdExpired: 'Your seat hold has expired.',
     backToSeats: 'Back to seat selection',
     holdLeft: 'Time left to pay',
-    signIn: 'Sign in', signOut: 'Sign out', loginGithub: 'Continue with GitHub', loginToPay: 'Sign in to continue to payment.',
-    loginToSee: 'Sign in to see your tickets.', noTickets: "You haven't bought any tickets yet.",
+    signIn: 'Sign in',
+    signOut: 'Sign out',
+    loginGithub: 'Continue with GitHub',
+    loginToPay: 'Sign in to continue to payment.',
+    loginToSee: 'Sign in to see your tickets.',
+    noTickets: "You haven't bought any tickets yet.",
+    payCancelled:
+      'The payment was cancelled or failed. Your seats are still held, please try again.',
+    gatewayDown: "Couldn't reach the payment gateway. Please try again shortly.",
+    payLost:
+      'Your seat hold had expired, so no ticket was issued. The gateway will refund the payment.',
+    payVerify:
+      'We could not verify the payment. If you were charged, please check again in a few minutes.',
+    search: 'Search movies…',
+    allGenres: 'All',
+    noResults: 'No movies found.',
+    fromPrice: 'From',
   },
 } as const

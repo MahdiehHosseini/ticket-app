@@ -9,6 +9,8 @@ import { dict, digits, fmt, pick } from '@/lib/i18n'
 import { getPrefs } from '@/lib/prefs'
 import { getEvent, getShow, getShows, getTakenSeats } from '@/lib/queries'
 
+export const metadata = { robots: { index: false, follow: false } }
+
 async function Content({ params }: { params: Promise<{ showId: string }> }) {
   const { showId } = await params
   const { locale } = await getPrefs()

@@ -14,7 +14,7 @@ const p = {
 export const iconBase = 'grid h-10 w-10 shrink-0 place-items-center rounded-full transition-colors'
 export const iconBtn = `${iconBase} bg-[var(--avail)] text-[var(--ink)] hover:bg-[var(--line)]`
 const ctaBase = 'flex w-full items-center justify-between rounded-full px-6 py-4 font-bold'
-export const cta = `${ctaBase} bg-[var(--accent)] text-white shadow-[0_12px_24px_-10px_var(--accent)]`
+export const cta = `${ctaBase} cta-grad`
 export const ctaOff = `${ctaBase} cursor-not-allowed bg-[var(--avail)] text-[var(--muted)]`
 
 // فلش به چپ؛ در راست‌به‌چپ «بازگشت» با rtl:rotate-180 و «ادامه» بدون چرخش، در انگلیسی برعکس
@@ -64,3 +64,10 @@ export function Stars({ rating }: { rating: string }) {
     </span>
   )
 }
+
+export const Search = () => (
+  <svg {...p}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="M20 20l-3.5-3.5" />
+  </svg>
+)

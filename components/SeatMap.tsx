@@ -46,10 +46,10 @@ export default function SeatMap({
         aria-pressed={isPicked}
         className={`aspect-square rounded-md transition-all ${
           isTaken
-            ? 'cursor-not-allowed bg-[var(--reserved)]'
+            ? 'cursor-not-allowed bg-[var(--reserved)] opacity-60'
             : isPicked
-              ? 'scale-110 bg-[var(--accent)]'
-              : `bg-[var(--avail)] hover:bg-[var(--line)] ${premium ? 'border-b-2 border-[var(--muted)]' : ''}`
+              ? 'seat-picked'
+              : `bg-[var(--avail)] hover:scale-110 hover:bg-[var(--line)] ${premium ? 'border-b-2 border-[var(--muted)]' : ''}`
         }`}
       />
     )
@@ -71,12 +71,16 @@ export default function SeatMap({
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex-1 lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-8 lg:px-8 lg:pb-12 lg:pt-4">
+      <div className="flex-1 lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-8 lg:px-8 lg:pt-4 lg:pb-12">
         <div className="px-5 pb-4 lg:rounded-3xl lg:bg-[var(--card)] lg:p-10">
           <Screen label={t.curtain} />
           <div dir="ltr" className="mx-auto mt-3 grid max-w-[560px] gap-y-2 lg:gap-y-2.5">
             {rows.map((r) => (
-              <div key={r} className={GRID}>
+              <div
+                key={r}
+                className={`${GRID} row-in`}
+                style={{ '--r': rows.indexOf(r) } as React.CSSProperties}
+              >
                 <span className="text-[10px] text-[var(--muted)]">{r}</span>
                 {Array.from({ length: HALF }, (_, i) => seat(r, i))}
                 <i />
@@ -92,10 +96,10 @@ export default function SeatMap({
           <p className="mt-2 text-center text-[11px] text-[var(--muted)]">{t.premium}</p>
         </div>
 
-        <aside className="space-y-3 px-5 pb-4 pt-2 lg:sticky lg:top-6 lg:rounded-3xl lg:bg-[var(--card)] lg:p-6">
+        <aside className="space-y-3 px-5 pt-2 pb-4 lg:sticky lg:top-6 lg:rounded-3xl lg:bg-[var(--card)] lg:p-6">
           {children}
           <div className="hidden lg:block">
-            <h2 className="mb-2 mt-4 text-lg font-extrabold">{t.selected}</h2>
+            <h2 className="mt-4 mb-2 text-lg font-extrabold">{t.selected}</h2>
             {picked.length === 0 ? (
               <p className="text-sm text-[var(--muted)]">{t.pickHint.replace('{n}', f(MAX))}</p>
             ) : (
@@ -112,7 +116,7 @@ export default function SeatMap({
                 ))}
               </ul>
             )}
-            <div className="mb-4 mt-3 flex justify-between border-t border-[var(--line)] pt-3 font-bold">
+            <div className="mt-3 mb-4 flex justify-between border-t border-[var(--line)] pt-3 font-bold">
               <span>{t.total}</span>
               <span>
                 {f(total)} {t.currency}
@@ -124,7 +128,7 @@ export default function SeatMap({
         </aside>
       </div>
 
-      <div className="sticky bottom-0 z-10 bg-[var(--card)] px-4 pb-4 pt-2 lg:hidden">
+      <div className="sticky bottom-0 z-10 bg-[var(--card)] px-4 pt-2 pb-4 lg:hidden">
         {picked.length > 0 && (
           <p className="mb-2 px-2 text-xs text-[var(--muted)]">
             {picked.join(sep)} • {t.seatsCount.replace('{n}', f(picked.length))}
@@ -149,6 +153,7 @@ function Screen({ label }: { label: string }) {
         </defs>
         <path d="M10 38 Q160 -6 310 38 L332 80 L-12 80 Z" fill="url(#scr)" />
         <path
+          className="screen-glow"
           d="M10 38 Q160 -6 310 38"
           fill="none"
           strokeWidth="3"

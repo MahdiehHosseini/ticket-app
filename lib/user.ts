@@ -1,6 +1,6 @@
-import { auth } from '@/auth';
+import { auth } from '@/auth'
 
 export async function getUserId() {
-  const s = await auth();
-  return (s?.user as { id?: string } | undefined)?.id;
+  const s = await auth()
+  return (s?.user as { id?: string } | undefined)?.id
 }
