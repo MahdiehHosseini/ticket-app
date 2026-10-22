@@ -106,7 +106,6 @@ export async function payHold(showId: string) {
     .returning({ seat: reservations.seat })
 
   if (paid.length === 0) redirect(back) // نگه‌داری منقضی شده
-  jar.delete('hold')
   redirect('/tickets')
 }
 

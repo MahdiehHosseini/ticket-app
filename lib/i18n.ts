@@ -1,5 +1,3 @@
-import { signIn } from '@/auth'
-
 export type Locale = 'fa' | 'en'
 export type L = { fa: string; en: string }
 

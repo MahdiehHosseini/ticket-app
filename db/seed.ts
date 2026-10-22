@@ -110,7 +110,7 @@ async function main() {
   await db.insert(events).values(E)
   await db.insert(shows).values(S)
   await db.insert(reservations).values(R)
-  console.log(`seeded: ${E.length} events, ${S.length} shows, ${R.length} reservations`)
+  process.stdout.write(`seeded: ${E.length} events, ${S.length} shows, ${R.length} reservations\n`)
   await sql.end()
 }
 main().catch((e) => {
