@@ -36,5 +36,5 @@ async function Content({ searchParams }: { searchParams: Promise<{ next?: string
 }
 
 export default function Login(props: { searchParams: Promise<{ next?: string }> }) {
-  return <Suspense fallback={<Skeleton />}><Content {...props} /></Suspense>;
+  return <Suspense fallback={<Skeleton />}><Content {...props} /></Suspense>
 }

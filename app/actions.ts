@@ -30,6 +30,8 @@ export async function holdSeats(showId: string, seats: string[]): Promise<HoldEr
   }
 
   const jar = await cookies()
+  const userId = await getUserId()
+  if (!userId) redirect(`/login?next=${encodeURIComponent(`/book/${showId}`)}`)
   const token = jar.get('hold')?.value ?? randomUUID()
   const expiresAt = new Date(Date.now() + HOLD_MINUTES * 60_000)
 

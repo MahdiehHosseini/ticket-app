@@ -42,7 +42,7 @@ export default function EventBrowser({
             onChange={(e) => setQ(e.target.value)}
             placeholder={t.search}
             aria-label={t.search}
-            className="w-full bg-transparent text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
+            className="w-full bg-transparent text-[var(--ink)] outline-none! placeholder:text-[var(--muted)]"
           />
         </label>
       </div>

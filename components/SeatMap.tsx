@@ -1,6 +1,7 @@
 'use client'
-import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useState, useTransition } from 'react'
+import { holdSeats } from '@/app/actions'
 import { cols, rows, seatPrice } from '@/lib/data'
 import { dict, fmt, type Locale } from '@/lib/i18n'
 import { Chevron, cta, ctaOff } from './Icons'
@@ -25,16 +26,34 @@ export default function SeatMap({
 }) {
   const t = dict[locale]
   const f = fmt(locale)
+  const router = useRouter()
+  const [pending, startTransition] = useTransition()
   const [picked, setPicked] = useState<string[]>([])
+  const [unavailable, setUnavailable] = useState<string[]>([])
+  const [error, setError] = useState('')
   const total = picked.reduce((sum, s) => sum + seatPrice(base, s), 0)
   const sep = locale === 'fa' ? '، ' : ', '
 
-  const toggle = (id: string) =>
+  const toggle = (id: string) => {
+    setError('')
     setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : p.length < MAX ? [...p, id] : p))
+  }
+
+  const reserve = () => {
+    startTransition(async () => {
+      const result = await holdSeats(showId, picked)
+      if (result) {
+        setError(t.seatsTaken)
+        setPicked([])
+        if (result.seats) setUnavailable((current) => [...new Set([...current, ...result.seats!])])
+        router.refresh()
+      }
+    })
+  }
 
   const seat = (r: string, i: number) => {
     const id = `${r}${i + 1}`
-    const isTaken = taken.includes(id)
+    const isTaken = taken.includes(id) || unavailable.includes(id)
     const isPicked = picked.includes(id)
     const premium = /^[D-F]/.test(r)
     return (
@@ -55,16 +74,16 @@ export default function SeatMap({
     )
   }
 
-  // دکمه‌ی ادامه: هم در نوار پایین موبایل و هم در سایدبار دسکتاپ استفاده می‌شود
+  // دکمه‌ی ادامه: صندلی‌ها را روی سرور نگه می‌دارد و بعد به پرداخت می‌رود
   const action =
     picked.length > 0 ? (
-      <Link href={`/checkout?show=${showId}&seats=${picked.join(',')}`} className={cta}>
-        <span>{t.next}</span>
+      <button onClick={reserve} disabled={pending} className={`${cta} disabled:opacity-60`}>
+        <span>{pending ? '…' : t.next}</span>
         <span className="flex items-center gap-2">
           {f(total)} {t.currency}
           <Chevron className="ltr:rotate-180" />
         </span>
-      </Link>
+      </button>
     ) : (
       <span className={ctaOff}>{t.pickFirst}</span>
     )
@@ -129,6 +148,11 @@ export default function SeatMap({
       </div>
 
       <div className="sticky bottom-0 z-10 bg-[var(--card)] px-4 pt-2 pb-4 lg:hidden">
+        {error && (
+          <p role="alert" className="mb-2 px-2 text-xs text-[var(--accent)]">
+            {error}
+          </p>
+        )}
         {picked.length > 0 && (
           <p className="mb-2 px-2 text-xs text-[var(--muted)]">
             {picked.join(sep)} • {t.seatsCount.replace('{n}', f(picked.length))}
