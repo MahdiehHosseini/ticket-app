@@ -9,6 +9,7 @@ export type Event = {
   rating: string
   blurb: L
   colors: [string, string]
+  poster?: string
 }
 export type Show = {
   id: string

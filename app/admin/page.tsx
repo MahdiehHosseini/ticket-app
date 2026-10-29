@@ -40,6 +40,7 @@ const A = {
     empty: 'هنوز رویدادی نیست.',
     noShows: 'بدون سانس',
     min: 'دقیقه',
+    poster: 'پوستر (مسیر یا آدرس، اختیاری)'
   },
   en: {
     title: 'Admin panel',
@@ -68,6 +69,7 @@ const A = {
     empty: 'No events yet.',
     noShows: 'No showtimes',
     min: 'min',
+    poster: 'Poster (path or URL, optional)'
   },
 } as const
 
@@ -267,6 +269,9 @@ async function Content() {
                       required
                       className={input}
                     />
+                  </Field>
+                  <Field label={a.poster}>
+                    <input name="poster" dir="ltr" placeholder="/posters/my-film.jpg" className={input} />
                   </Field>
                   <button className={`${cta} sm:col-span-2 lg:col-span-4 lg:mx-auto lg:max-w-xs`}>
                     <span>{a.save}</span>

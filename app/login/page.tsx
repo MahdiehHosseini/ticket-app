@@ -25,9 +25,8 @@ async function Content({ searchParams }: { searchParams: Promise<{ next?: string
         <div className="rise grid gap-5 rounded-3xl bg-[var(--card)] p-6 lg:p-8">
           <h1 className="text-2xl font-extrabold">{t.title}</h1>
           <LoginForm locale={locale} next={safe} />
-          <p className="text-center text-xs text-[var(--muted)]">— {t.or} —</p>
           <form action={async () => { 'use server'; await signIn('github', { redirectTo: safe }); }}>
-            <button className="w-full rounded-full bg-[var(--avail)] px-6 py-4 font-bold transition-colors hover:bg-[var(--line)]">{t.github}</button>
+            <button className="rounded-full bg-[var(--avail)] px-4 py-2 text-13px font-bold transition-colors hover:bg-[var(--line)]">{t.github}</button>
           </form>
         </div>
       </div>

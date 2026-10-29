@@ -35,19 +35,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: init }} />
       </head>
-      <body>
-        {/* موبایل: تمام‌عرض با زمینه‌ی سفید. دسکتاپ: عرض ۱۱۵۲ با کارت‌های جدا روی زمینه‌ی لوندر */}
-        <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col bg-transparent">
-          <div className="hidden lg:block">
-            <Suspense fallback={<div className="h-[72px]" />}>
-              <AppBar />
-            </Suspense>
+      <body suppressHydrationWarning>
+        <NextTopLoader color="#ff3d77" height={3} showSpinner={false} shadow="0 0 12px #ff3d77" />
+        <RegisterSW />
+        <div className="flex min-h-dvh w-full flex-col bg-transparent">
+          {/* نوار بالای چسبان: فقط دسکتاپ. روی موبایل هر صفحه AppBar خودش را دارد */}
+          <div className="sticky top-0 z-40 hidden w-full bg-[var(--card)] backdrop-blur-xl shadow-sm lg:block">
+            <div className="mx-auto w-full max-w-6xl">
+              <Suspense fallback={<div className="h-[72px]" />}>
+                <AppBar />
+              </Suspense>
+            </div>
           </div>
-          <Suspense fallback={null}>{children}</Suspense>
+          <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
+            <Suspense fallback={null}>{children}</Suspense>
+          </div>
         </div>
       </body>
-      <NextTopLoader color="#ff3d77" height={3} showSpinner={false} shadow="0 0 12px #ff3d77" />
-      <RegisterSW />
     </html>
   )
 }

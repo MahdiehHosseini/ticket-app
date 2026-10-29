@@ -12,6 +12,7 @@ export const events = pgTable('events', {
   rating: text('rating').notNull(),
   colorFrom: text('color_from').notNull(),
   colorTo: text('color_to').notNull(),
+  poster: text('poster')
 });
 
 export const shows = pgTable(

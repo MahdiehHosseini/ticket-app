@@ -28,6 +28,7 @@ export async function createEvent(form: FormData) {
     durationMin: Number(str(form, 'duration')),
     rating: str(form, 'rating'),
     colorFrom: str(form, 'colorFrom'),
+    poster: str(form, 'poster') || null,
     colorTo: str(form, 'colorTo'),
   }
   const rating = Number(e.rating)
@@ -42,10 +43,11 @@ export async function createEvent(form: FormData) {
     Number.isInteger(e.durationMin) &&
     e.durationMin > 0 &&
     e.durationMin < 600 &&
-    rating >= 0 &&
-    rating <= 10 &&
-    HEX.test(e.colorFrom) &&
-    HEX.test(e.colorTo)
+    rating >= 0 && 
+    rating <= 10 && 
+    HEX.test(e.colorFrom) && 
+    HEX.test(e.colorTo) &&
+    (!e.poster || /^(\/|https:\/\/)/.test(e.poster))
   if (!valid) return
   await db.insert(events).values(e).onConflictDoNothing()
   revalidatePath('/admin')

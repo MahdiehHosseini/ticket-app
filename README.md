@@ -43,32 +43,31 @@ Pages use per-page `<Suspense>` boundaries with skeletons (Next 16 `cacheCompone
 npm install
 cp .env.example .env     # fill in the values (see below)
 npm run db:push          # create tables
-npm run db:seed          # demo films, showtimes and some taken seats
 npm run dev
 ```
 
 ### Environment variables
 
-| Variable                               | Purpose                                                           |
-| -------------------------------------- | ----------------------------------------------------------------- |
-| `DATABASE_URL`                         | Postgres connection string                                        |
-| `AUTH_SECRET`                          | Generate with `npx auth secret`                                   |
-| `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET` | GitHub OAuth app (callback: `<site>/api/auth/callback/github`)    |
-| `ADMIN_LOGINS`                         | Comma-separated GitHub usernames allowed into `/admin`            |
-| `ZARINPAL_MERCHANT_ID`                 | Optional. Leave empty to use the built-in fake payment (dev only) |
-| `ZARINPAL_SANDBOX`                     | `true` (default) or `false` for production                        |
-| `APP_URL`                              | Public site URL, used for the payment callback                    |
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Postgres connection string |
+| `AUTH_SECRET` | Generate with `npx auth secret` |
+| `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET` | GitHub OAuth app (callback: `<site>/api/auth/callback/github`) |
+| `ADMIN_LOGINS` | Comma-separated GitHub usernames allowed into `/admin` |
+| `ZARINPAL_MERCHANT_ID` | Optional. Leave empty to use the built-in fake payment (dev only) |
+| `ZARINPAL_SANDBOX` | `true` (default) or `false` for production |
+| `APP_URL` | Public site URL, used for the payment callback |
 
 ### Scripts
 
-`npm run dev` · `npm run build` · `npm run db:push` (apply schema) · `npm run db:seed` (reset demo data)
+`npm run dev` · `npm run build` · `npm run db:push` (apply schema)
 
 ## Project structure
 
 ```
 app/            routes: home, events/[id], book/[showId], checkout, tickets, admin, api/*
 components/     SeatMap, Poster, Countdown, AppBar, LoginGate, ...
-db/             Drizzle schema, client, seed
+db/             Drizzle schema and client
 lib/            queries, booking core, Zarinpal client, i18n, helpers
 auth.ts         Auth.js config
 ```
@@ -78,7 +77,7 @@ auth.ts         Auth.js config
 1. Push to GitHub and import the repo in Netlify.
 2. Add all environment variables above (set `APP_URL` and `AUTH_URL` to the site URL).
 3. Add the production callback URL to your GitHub OAuth app.
-4. Run `npm run db:push` and `npm run db:seed` once against the production database (or create data from `/admin`).
+4. Run `npm run db:push` once against the production database, then create films and showtimes from `/admin`.
 
 ## Known limitations / next steps
 

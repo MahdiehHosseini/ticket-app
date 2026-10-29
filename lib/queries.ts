@@ -32,6 +32,7 @@ const toEvent = (r: typeof events.$inferSelect): Event => ({
   duration: r.durationMin,
   rating: r.rating,
   colors: [r.colorFrom, r.colorTo],
+   poster: r.poster ?? undefined,
 })
 
 const toShow = (r: typeof shows.$inferSelect): Show => ({
@@ -98,17 +99,6 @@ export async function getHold(showId: string, token?: string) {
     ? r.map((x) => x.expiresAt as Date).reduce((a, b) => (a < b ? a : b))
     : null
   return { seats, expiresAt }
-}
-
-// تعداد صندلی اشغال‌شده‌ی هر سانس یک رویداد، با یک کوئری
-export async function getTakenCounts(eventId: string): Promise<Record<string, number>> {
-  const r = await db
-    .select({ showId: reservations.showId, n: count() })
-    .from(reservations)
-    .innerJoin(shows, eq(reservations.showId, shows.id))
-    .where(and(eq(shows.eventId, eventId), active))
-    .groupBy(reservations.showId)
-  return Object.fromEntries(r.map((x) => [x.showId, x.n]))
 }
 
 // بلیت‌های پرداخت‌شده‌ی یک کاربر، گروه‌بندی‌شده بر اساس سفارش (تازه‌ترین اول)

@@ -35,7 +35,7 @@ export default function Toggles({ locale, theme }: { locale: Locale; theme: 'lig
       >
         {theme === 'dark' ? <Sun /> : <Moon />}
       </button>
-      <button onClick={flipLocale} className={`${iconBtn} text-xs font-bold`}>
+      <button onClick={flipLocale} className={`${iconBtn} w-16 text-xs font-bold`}>
         {t.other}
       </button>
     </>
