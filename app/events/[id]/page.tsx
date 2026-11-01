@@ -13,6 +13,7 @@ import { getEvent, getShows } from '@/lib/queries'
 import { salesOpen } from '@/lib/tickets'
 import ReviewSection from '@/components/ReviewSection'
 import { blended, getRatingStats } from '@/lib/reviews' 
+import CastSection from '@/components/CastSection'
 
 export async function generateMetadata({
   params,
@@ -99,6 +100,9 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
         <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] lg:text-base lg:leading-8">
           {pick(event.blurb, locale)}
         </p>
+        <Suspense fallback={null}>
+          <CastSection eventId={id} locale={locale} />
+        </Suspense>
 
         <h2 className="mt-7 mb-3 text-lg font-extrabold">{t.showtimes}</h2>
         {list.length === 0 && <p className="text-sm text-[var(--muted)]">{t.noShows}</p>}

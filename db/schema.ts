@@ -106,3 +106,19 @@ export const reviews = pgTable(
   },
   (t) => [uniqueIndex('reviews_event_user_uq').on(t.eventId, t.userId)],
 );
+
+// بازیگران و عوامل هر فیلم. role = نقش یا سمت (مثلاً «کارگردان»)، photo = مسیر محلی یا آدرس https (اختیاری).
+export const castMembers = pgTable(
+  'cast_members',
+  {
+    id: serial('id').primaryKey(),
+    eventId: text('event_id').notNull().references(() => events.id, { onDelete: 'cascade' }),
+    nameFa: text('name_fa').notNull(),
+    nameEn: text('name_en').notNull(),
+    roleFa: text('role_fa'),
+    roleEn: text('role_en'),
+    photo: text('photo'),
+    position: integer('position').notNull().default(0), // ترتیب نمایش، کمتر = زودتر
+  },
+  (t) => [index('cast_event_idx').on(t.eventId)],
+);

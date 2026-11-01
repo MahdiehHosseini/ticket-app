@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(bun run db:push)",
+      "Bash(curl -s -o /dev/null -w \"admin:%{http_code}\\\\n\" http://localhost:3000/admin)",
+      "Bash(curl -s http://localhost:3000/ -o /tmp/home.html -w \"home:%{http_code}\\\\n\")",
+      "Read(//tmp/**)",
+      "Bash(curl -s http://localhost:3000/events/rah-e-shiri -o /tmp/ev.html -w \"event:%{http_code}\\\\n\")"
+    ]
+  }
+}

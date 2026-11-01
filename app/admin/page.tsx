@@ -13,6 +13,7 @@ import { getUserId } from '@/lib/user'
 import { createEvent, createShow, deleteEvent, deleteShow } from './actions'
 import ShowDateTimeFields from './ShowDateTimeFields'
 import HallPicker from './HallPicker'
+import AdminCast from '@/components/AdminCast'
 
 const A = {
   fa: {
@@ -244,6 +245,7 @@ async function Content() {
                 })}
               </ul>
 
+              <AdminCast eventId={e.id} locale={locale} />
               <details className="mt-4">
                 <summary className={`${sum} w-fit`}>{a.newShow}</summary>
                 <form action={createShow} className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
