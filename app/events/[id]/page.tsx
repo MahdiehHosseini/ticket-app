@@ -10,6 +10,7 @@ import { dict, digits, fmt, pick } from '@/lib/i18n'
 import { getPrefs } from '@/lib/prefs'
 import { getEventCached } from '@/lib/cached'
 import { getEvent, getShows } from '@/lib/queries'
+import { salesOpen } from '@/lib/tickets'
 
 export async function generateMetadata({
   params,
@@ -33,7 +34,7 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
   const event = await getEvent(id)
   if (!event) notFound()
 
-  const list = await getShows(id)
+  const list = (await getShows(id)).filter((s) => salesOpen(s))
   const t = dict[locale]
   const days = [...new Set(list.map((s) => dayKey(s.startsAt)))]
   const ld = {

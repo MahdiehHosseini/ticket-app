@@ -13,6 +13,7 @@ import { getHoldToken } from '@/lib/hold'
 import { dict, digits, fmt, pick } from '@/lib/i18n'
 import { getPrefs } from '@/lib/prefs'
 import { getEvent, getHold, getShow } from '@/lib/queries'
+import { getProfile } from '@/lib/profile'
 
 export const metadata = { robots: { index: false, follow: false } }
 
@@ -57,10 +58,12 @@ async function Content({
     )
   }
 
-  if (!(await getUserId()))
+  const userId = await getUserId()
+  if (!userId)
     return (
       <LoginGate locale={locale} redirectTo={`/checkout?show=${show.id}`} message={t.loginToPay} />
     )
+  const profile = await getProfile(userId)
 
   const list = hold.seats
   const total = list.reduce((s, id) => s + seatPrice(show.price, id), 0)
@@ -123,11 +126,20 @@ async function Content({
             <div className="grid max-w-md gap-4">
               <label className="grid gap-1 text-sm">
                 {t.fullName}
-                <input className={input} />
+                <input
+                  className={input}
+                  defaultValue={[profile?.firstName, profile?.lastName].filter(Boolean).join(' ')}
+                />
               </label>
               <label className="grid gap-1 text-sm">
                 {t.mobile}
-                <input dir="ltr" inputMode="tel" className={input} placeholder="09123456789" />
+                <input
+                  dir="ltr"
+                  inputMode="tel"
+                  className={input}
+                  placeholder="09123456789"
+                  defaultValue={profile?.phone ?? ''}
+                />
               </label>
               <label className="grid gap-1 text-sm">
                 {t.promo}

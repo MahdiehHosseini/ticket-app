@@ -9,6 +9,7 @@ import { cols, rows, seatPrice } from '@/lib/data'
 import { getHold, getShow } from '@/lib/queries'
 import { getUserId } from '@/lib/user'
 import { requestPayment } from '@/lib/zarinpal'
+import { salesOpen } from '@/lib/tickets'
 
 const HOLD_MINUTES = 10
 const MAX_SEATS = 6
@@ -20,11 +21,13 @@ type HoldError = { error: 'invalid' | 'taken'; seats?: string[] }
 // وگرنه خطا و لیست صندلی‌های گرفته‌شده را برمی‌گرداند.
 export async function holdSeats(showId: string, seats: string[]): Promise<HoldError | undefined> {
   const unique = [...new Set(seats)]
+  const show = await getShow(showId)
   if (
     unique.length === 0 ||
     unique.length > MAX_SEATS ||
     !unique.every((s) => ALL.has(s)) ||
-    !(await getShow(showId))
+    !show ||
+    !salesOpen(show)
   ) {
     return { error: 'invalid' }
   }
@@ -120,7 +123,7 @@ export async function startPayment(showId: string) {
 
   const show = await getShow(showId)
   const hold = await getHold(showId, token)
-  if (!show || hold.seats.length === 0) redirect(back())
+  if (!show || !salesOpen(show) || hold.seats.length === 0) redirect(back())
   const amount = hold.seats.reduce((s, id) => s + seatPrice(show.price, id), 0)
 
   // تا وقتی کاربر در درگاه است، نگه‌داری صندلی‌ها منقضی نشود

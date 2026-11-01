@@ -1,4 +1,4 @@
-import { index, integer, pgTable, serial, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { index, integer, pgTable, serial, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
 
 export const events = pgTable('events', {
   id: text('id').primaryKey(), // slug
@@ -12,28 +12,32 @@ export const events = pgTable('events', {
   rating: text('rating').notNull(),
   colorFrom: text('color_from').notNull(),
   colorTo: text('color_to').notNull(),
-  poster: text('poster')
-});
+  poster: text('poster'),
+})
 
 export const shows = pgTable(
   'shows',
   {
     id: text('id').primaryKey(),
-    eventId: text('event_id').notNull().references(() => events.id, { onDelete: 'cascade' }),
+    eventId: text('event_id')
+      .notNull()
+      .references(() => events.id, { onDelete: 'cascade' }),
     startsAt: timestamp('starts_at', { withTimezone: true }).notNull(),
     hallFa: text('hall_fa').notNull(),
     hallEn: text('hall_en').notNull(),
     price: integer('price').notNull(), // تومان
   },
   (t) => [index('shows_event_idx').on(t.eventId)],
-);
+)
 
 // هر ردیف = یک صندلی نگه‌داشته‌شده (held) یا خریداری‌شده (paid)
 export const reservations = pgTable(
   'reservations',
   {
     id: serial('id').primaryKey(),
-    showId: text('show_id').notNull().references(() => shows.id, { onDelete: 'cascade' }),
+    showId: text('show_id')
+      .notNull()
+      .references(() => shows.id, { onDelete: 'cascade' }),
     seat: text('seat').notNull(), // مثل D5
     status: text('status', { enum: ['held', 'paid'] }).notNull(),
     expiresAt: timestamp('expires_at', { withTimezone: true }), // فقط برای held
@@ -44,21 +48,25 @@ export const reservations = pgTable(
   },
   // جلوی رزرو دوبل یک صندلی در یک سانس را در سطح دیتابیس می‌گیرد
   (t) => [uniqueIndex('reservations_show_seat_uq').on(t.showId, t.seat)],
-);
+)
 
 // هر ردیف = یک تلاش پرداخت در درگاه. authority شناسه‌ی تراکنش درگاه است و callback با آن پیدا می‌شود.
 export const payments = pgTable('payments', {
   id: serial('id').primaryKey(),
   authority: text('authority').notNull().unique(),
-  showId: text('show_id').notNull().references(() => shows.id, { onDelete: 'cascade' }),
+  showId: text('show_id')
+    .notNull()
+    .references(() => shows.id, { onDelete: 'cascade' }),
   userId: text('user_id').notNull(),
   holdToken: text('hold_token').notNull(),
   seats: text('seats').notNull(), // با ویرگول جدا شده
   amount: integer('amount').notNull(), // تومان، محاسبه‌شده سمت سرور
-  status: text('status', { enum: ['pending', 'verifying', 'paid', 'failed'] }).notNull().default('pending'),
+  status: text('status', { enum: ['pending', 'verifying', 'paid', 'failed'] })
+    .notNull()
+    .default('pending'),
   refId: text('ref_id'), // شماره‌ی پیگیری درگاه
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+})
 
 // کدهای یک‌بارمصرف ورود با ایمیل. فقط hash ذخیره می‌شود، نه خود کد.
 export const otpCodes = pgTable(
@@ -73,4 +81,13 @@ export const otpCodes = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index('otp_email_idx').on(t.email)],
-);
+)
+
+// اطلاعات پروفایل هر کاربر (کلید: همان userId نشست). ایمیل از خود حساب می‌آید و اینجا ذخیره نمی‌شود.
+export const profiles = pgTable('profiles', {
+  userId: text('user_id').primaryKey(),
+  firstName: text('first_name').notNull().default(''),
+  lastName: text('last_name').notNull().default(''),
+  phone: text('phone'), // نرمال‌شده: 09123456789
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})

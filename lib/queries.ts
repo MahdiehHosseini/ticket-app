@@ -32,7 +32,7 @@ const toEvent = (r: typeof events.$inferSelect): Event => ({
   duration: r.durationMin,
   rating: r.rating,
   colors: [r.colorFrom, r.colorTo],
-   poster: r.poster ?? undefined,
+  poster: r.poster ?? undefined,
 })
 
 const toShow = (r: typeof shows.$inferSelect): Show => ({
@@ -149,6 +149,7 @@ export async function getFromPrices(): Promise<Record<string, number>> {
   const r = await db
     .select({ eventId: shows.eventId, p: min(shows.price) })
     .from(shows)
+    .where(gt(shows.startsAt, sql`now()`))
     .groupBy(shows.eventId)
   return Object.fromEntries(r.map((x) => [x.eventId, x.p ?? 0]))
 }

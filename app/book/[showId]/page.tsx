@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense, type ComponentProps } from 'react'
-import { Chevron, iconBtn } from '@/components/Icons'
+import { Chevron, cta, iconBtn } from '@/components/Icons'
 import SeatMap from '@/components/SeatMap'
 import Skeleton from '@/components/Skeleton'
 import { dayChip, dayKey } from '@/lib/format'
 import { dict, digits, fmt, pick } from '@/lib/i18n'
 import { getPrefs } from '@/lib/prefs'
 import { getEvent, getShow, getShows, getTakenSeats } from '@/lib/queries'
+import { salesOpen } from '@/lib/tickets'
 
 export const metadata = { robots: { index: false, follow: false } }
 
@@ -17,8 +18,23 @@ async function Content({ params }: { params: Promise<{ showId: string }> }) {
   const show = await getShow(showId)
   const event = show && (await getEvent(show.eventId))
   if (!show || !event) notFound()
+  if (!salesOpen(show)) {
+    const t = dict[locale]
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 text-center">
+        <p className="text-lg font-bold">{t.salesClosed}</p>
+        <Link href={`/events/${event.id}`} className={`${cta} mx-auto max-w-xs`}>
+          <span>{t.showtimes}</span>
+        </Link>
+      </div>
+    )
+  }
 
-  const [list, taken] = await Promise.all([getShows(event.id), getTakenSeats(show.id)])
+  const [list, taken] = await Promise.all([
+    getShows(event.id).then((l) => l.filter((s) => salesOpen(s))),
+    getTakenSeats(show.id),
+  ])
+
   const t = dict[locale]
   const key = dayKey(show.startsAt)
   const firstOfDay = list.filter(

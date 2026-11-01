@@ -11,6 +11,8 @@ import { getPrefs } from '@/lib/prefs'
 import { getEvents, getSalesByShow, getShows } from '@/lib/queries'
 import { getUserId } from '@/lib/user'
 import { createEvent, createShow, deleteEvent, deleteShow } from './actions'
+import ShowDateTimeFields from './ShowDateTimeFields'
+import HallPicker from './HallPicker'
 
 const A = {
   fa: {
@@ -40,7 +42,7 @@ const A = {
     empty: 'هنوز رویدادی نیست.',
     noShows: 'بدون سانس',
     min: 'دقیقه',
-    poster: 'پوستر (مسیر یا آدرس، اختیاری)'
+    poster: 'پوستر (مسیر یا آدرس، اختیاری)',
   },
   en: {
     title: 'Admin panel',
@@ -69,7 +71,7 @@ const A = {
     empty: 'No events yet.',
     noShows: 'No showtimes',
     min: 'min',
-    poster: 'Poster (path or URL, optional)'
+    poster: 'Poster (path or URL, optional)',
   },
 } as const
 
@@ -246,19 +248,8 @@ async function Content() {
                 <summary className={`${sum} w-fit`}>{a.newShow}</summary>
                 <form action={createShow} className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <input type="hidden" name="eventId" value={e.id} />
-                  <Field label={a.date}>
-                    <input name="date" type="date" required className={input} />
-                  </Field>
-                  <Field label={a.time}>
-                    <input name="time" type="time" required className={input} />
-                  </Field>
-                  <Field label={a.hall}>
-                    <select name="hall" className={input}>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                    </select>
-                  </Field>
+                  <ShowDateTimeFields locale={locale} dateLabel={a.date} timeLabel={a.time} />
+                  <HallPicker locale={locale} label={a.hall} />
                   <Field label={a.price}>
                     <input
                       name="price"
@@ -271,7 +262,12 @@ async function Content() {
                     />
                   </Field>
                   <Field label={a.poster}>
-                    <input name="poster" dir="ltr" placeholder="/posters/my-film.jpg" className={input} />
+                    <input
+                      name="poster"
+                      dir="ltr"
+                      placeholder="/posters/my-film.jpg"
+                      className={input}
+                    />
                   </Field>
                   <button className={`${cta} sm:col-span-2 lg:col-span-4 lg:mx-auto lg:max-w-xs`}>
                     <span>{a.save}</span>
