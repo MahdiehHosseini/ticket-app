@@ -11,6 +11,8 @@ import { getPrefs } from '@/lib/prefs'
 import { getEventCached } from '@/lib/cached'
 import { getEvent, getShows } from '@/lib/queries'
 import { salesOpen } from '@/lib/tickets'
+import ReviewSection from '@/components/ReviewSection'
+import { blended, getRatingStats } from '@/lib/reviews' 
 
 export async function generateMetadata({
   params,
@@ -31,10 +33,12 @@ export async function generateMetadata({
 async function Content({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const { locale } = await getPrefs()
-  const event = await getEvent(id)
-  if (!event) notFound()
+ const base = await getEvent(id)
+  if (!base) notFound()
+  const stats = await getRatingStats()
+  const event = { ...base, rating: blended(base.rating, stats[id]) }
 
-  const list = (await getShows(id)).filter((s) => salesOpen(s))
+  const list = (await getShows(id)).filter((s) => salesOpen(s)) 
   const t = dict[locale]
   const days = [...new Set(list.map((s) => dayKey(s.startsAt)))]
   const ld = {
@@ -46,6 +50,7 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
     genre: event.genre.en,
     duration: `PT${event.duration}M`,
     url: `${process.env.APP_URL ?? 'http://localhost:3000'}/events/${id}`,
+    ...(stats[id]?.n ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: event.rating, bestRating: 10, ratingCount: stats[id].n } } : {}),
   }
   const buy = list[0] && (
     <Link href={`/book/${list[0].id}`} className={cta}>
@@ -117,6 +122,9 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
           )
         })}
         <div className="mt-8 hidden lg:block lg:max-w-xs">{buy}</div>
+        <Suspense fallback={null}>
+          <ReviewSection eventId={id} base={base.rating} locale={locale} />
+        </Suspense>
       </section>
 
       {buy && <div className="sticky bottom-0 bg-[var(--card)] p-4 lg:hidden">{buy}</div>}

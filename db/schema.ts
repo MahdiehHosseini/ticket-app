@@ -91,3 +91,18 @@ export const profiles = pgTable('profiles', {
   phone: text('phone'), // نرمال‌شده: 09123456789
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
+
+// نظر و امتیاز کاربر به یک فیلم. هر کاربر برای هر فیلم فقط یک نظر دارد (قابل ویرایش).
+export const reviews = pgTable(
+  'reviews',
+  {
+    id: serial('id').primaryKey(),
+    eventId: text('event_id').notNull().references(() => events.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull(),
+    stars: integer('stars').notNull(), // ۱ تا ۵ (اعتبارسنجی در سرور)
+    comment: text('comment').notNull().default(''),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('reviews_event_user_uq').on(t.eventId, t.userId)],
+);

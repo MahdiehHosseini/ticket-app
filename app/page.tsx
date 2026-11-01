@@ -8,11 +8,13 @@ import Skeleton from '@/components/Skeleton'
 import { dict, fmt, pick } from '@/lib/i18n'
 import { getPrefs } from '@/lib/prefs'
 import { getEvents, getFromPrices } from '@/lib/queries'
+import { blended, getRatingStats } from '@/lib/reviews'
 
 async function Content() {
   const { locale } = await getPrefs()
   const t = dict[locale]
-  const [events, prices] = await Promise.all([getEvents(), getFromPrices()])
+  const [base, prices, stats] = await Promise.all([getEvents(), getFromPrices(), getRatingStats()]);
+  const events = base.map((e) => ({ ...e, rating: blended(e.rating, stats[e.id]) }));
   const hero = [...events].sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))[0]
 
   return (
